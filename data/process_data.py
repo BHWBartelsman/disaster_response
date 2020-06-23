@@ -1,8 +1,22 @@
 import sys
+import sqlite3
+import pandas as pd
 
 
 def load_data(messages_filepath, categories_filepath):
-    pass
+   """ Args in: filepath for messages,filtepath for categories.
+       Args out: df
+       Description: Functions takes to filepaths, reads in csv's and merges on index """
+   
+   
+    # read messages and categorie from file path from file paths
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
+
+    # merges data sets
+    df = messages.merge(categories, on = 'id')
+
+    return df 
 
 
 def clean_data(df):
