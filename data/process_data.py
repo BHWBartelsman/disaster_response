@@ -1,6 +1,7 @@
 import sys
 import sqlite3
 import pandas as pd
+from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
@@ -55,7 +56,14 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
-    pass  
+    """
+    Args in: takes an df and database_filename
+    Args out: None
+    Description: Saves database into sql lite db
+    """
+    
+    engine = create_engine('sqlite:///'+ database_filename)
+    df.to_sql(database_filename[:-3], engine, index=False)
 
 
 def main():
