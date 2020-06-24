@@ -102,7 +102,21 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    pass
+    """
+    Args in: model, X_test, Y_test, category_names
+    Args out: None
+    Description: Evaluates every categorie and prints accuracy, recall, precision and F1
+    """
+
+    # predict score 
+    y_pred = model.predict(X_test)
+    y_pred_df = pd.DataFrame(data=y_pred, columns = category_names)
+
+    # loop over y and print score 
+    for i in category_names:
+        print(i)
+        print("-------------------------------------------")
+        print(classification_report(Y_test[i],y_pred_df[i]))
 
 
 def save_model(model, model_filepath):
