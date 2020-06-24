@@ -27,6 +27,8 @@ def load_data(database_filepath):
     engine = create_engine(database_filepath)
     df = pd.read_sql_table(database_filepath[:-3], engine)
 
+    return df
+
 def tokenize(text):
     """
     Args in: text file
