@@ -67,7 +67,38 @@ def tokenize(text):
 
 
 def build_model():
-    pass
+    """
+    Args in: None
+    Args out: model
+    Description: build model with pipeline and gridsearch
+    """
+
+    pipeline = Pipeline([
+    ('vect', CountVectorizer(tokenizer=tokenize)),
+    ('tfidf', TfidfTransformer()),
+    ('clf', MultiOutputClassifier(RandomForestClassifier()))
+    ])
+
+    # parameters for Gridsearch, if trainingtime is not a problem add uncomment parameters
+    parameters = {
+#        'vect__ngram_range': ((1, 1), (1, 2)),
+#        'vect__max_df': (0.5, 0.75, 1.0),
+#        'vect__max_features': (None, 5000, 10000),
+#        'tfidf__use_idf': (True, False),
+        'clf__estimator__n_estimators': [50, 100, 200],
+        'clf__estimator__min_samples_split': [2, 3, 4]
+#         'features__transformer_weights': (
+#             {'text_pipeline': 1, 'starting_verb': 0.5},
+#             {'text_pipeline': 0.5, 'starting_verb': 1},
+#             {'text_pipeline': 0.8, 'starting_verb': 1},
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+
+    # Change pipeline to cv if training time is not a problem to optimize model
+    return pipeline
+
+
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
