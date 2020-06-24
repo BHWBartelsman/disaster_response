@@ -19,7 +19,7 @@ from sklearn.multioutput import MultiOutputClassifier
 def load_data(database_filepath):
     """
     Args in: database_filepath
-    Args out: df
+    Args out:  X, Y, category_names
     Description: Takes in a filepath and reads in database_file name from process.py
     """
     
@@ -27,7 +27,17 @@ def load_data(database_filepath):
     engine = create_engine(database_filepath)
     df = pd.read_sql_table(database_filepath[:-3], engine)
 
-    return df
+    # split df in X and Y
+    X = df['message'].copy()
+    Y = df[list(df.columns)[4:]].copy()
+    
+    # make all y targets binary
+    Y['related']=Y['related'].map(lambda x: 1 if x == 2 else x)
+
+    # category names
+    category_names = list(Y.columns)
+
+    return X,Y,category_names
 
 def tokenize(text):
     """
