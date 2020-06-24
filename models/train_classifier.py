@@ -4,6 +4,7 @@ nltk.download(['punkt', 'wordnet'])
 import re
 import numpy as np
 import pandas as pd
+import pickle
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics import confusion_matrix, classification_report
@@ -120,8 +121,15 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
-    pass
+    """
+    Args in: model, modelfilepath
+    Args out: none
+    Description: Saves model on location filepath as pickle
+    """
 
+    modelpickle = pickle.dumps(model)
+    with open(model_filepath, "wb") as f:
+        f.write(modelpickle)
 
 def main():
     if len(sys.argv) == 3:
