@@ -25,8 +25,8 @@ def load_data(database_filepath):
     """
     
     #load data from database
-    engine = create_engine(database_filepath)
-    df = pd.read_sql_table(database_filepath[:-3], engine)
+    engine = create_engine('sqlite:///' + database_filepath)
+    df = pd.read_sql_table('DisasterResponse', engine)
 
     # split df in X and Y
     X = df['message'].copy()
