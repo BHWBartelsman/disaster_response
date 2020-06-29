@@ -42,6 +42,10 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    # extract categories correlation
+    category_corr = df.iloc[:,4:].corr().values
+    category_names = list(df.iloc[:,4:].columns)
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -64,6 +68,22 @@ def index():
                 }
             }
         }
+
+        {
+            'data': [
+                Heatmap(
+                    x=category_names,
+                    y=category_names[::-1],
+                    z=category_corr
+                )    
+            ],
+
+            'layout': {
+                'title': 'Heatmap of correlation Categories'
+            }
+        },
+
+        
     ]
     
     # encode plotly graphs in JSON
