@@ -75,8 +75,8 @@ def index():
         {
             'data': [
                 Bar(
-                    x=categories_counts,
-                    y=categories_names
+                    x=categories_names,
+                    y=categories_counts
                 )
             ],
 
@@ -95,7 +95,7 @@ def index():
             'data': [
                 Heatmap(
                     x=category_corr_names,
-                    y=category_corr_names[::-1],
+                    y=category_corr_names,#[::-1],
                     z=category_corr
                 )    
             ],
