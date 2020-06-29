@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -39,16 +39,19 @@ model = joblib.load("../models/classifier.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
+    # extract categories counts voor visuals
+    categories_counts = df.melt(id_vars = 'id', value_vars = list(df.columns)[4:]).groupby('variable').sum()['value']
+    categories_names = list(categories_counts.index)
+
+
     # extract categories correlation
     category_corr = df.iloc[:,4:].corr().values
-    category_names = list(df.iloc[:,4:].columns)
+    category_corr_names = list(df.iloc[:,4:].columns)
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -68,12 +71,31 @@ def index():
                 }
             }
         }
+        , 
+        {
+            'data': [
+                Bar(
+                    x=categories_counts,
+                    y=categories_names
+                )
+            ],
 
+            'layout': {
+                'title': 'Distribution of Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Categories"
+                }
+            }
+        }
+        ,
         {
             'data': [
                 Heatmap(
-                    x=category_names,
-                    y=category_names[::-1],
+                    x=category_corr_names,
+                    y=category_corr_names[::-1],
                     z=category_corr
                 )    
             ],
@@ -81,7 +103,7 @@ def index():
             'layout': {
                 'title': 'Heatmap of correlation Categories'
             }
-        },
+        }
 
         
     ]
